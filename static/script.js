@@ -1,4 +1,4 @@
-const API = "https://chat.joelsiervas.online/messages";
+const API = "/api/messages";
 
 const getMessages = async () => {
   const response = await fetch(API);
@@ -12,10 +12,13 @@ const getMessages = async () => {
     li.innerHTML = `<strong>${messages[i].user}:</strong> ${messages[i].text}`;
     ul.appendChild(li);
   }
+
+  // scroll automático
+  ul.scrollTop = ul.scrollHeight;
 };
 
 const postMessage = async (message) => {
-  await fetch(API, {
+  return await fetch(API, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -24,16 +27,16 @@ const postMessage = async (message) => {
   });
 };
 
+// auto refresh
+setInterval(getMessages, 1500);
+
 getMessages();
 
-// AUTO REFRESH (10 pts)
-setInterval(getMessages, 3000);
-
-// CLICK SEND
-document.getElementById("send").addEventListener("click", () => {
+// botón
+document.getElementById("send").addEventListener("click", async () => {
   const input = document.getElementById("message");
 
-  postMessage({
+  await postMessage({
     user: "alejandro",
     text: input.value,
   });
@@ -41,10 +44,9 @@ document.getElementById("send").addEventListener("click", () => {
   input.value = "";
 });
 
-// ENTER PARA ENVIAR (10 pts)
+// enter
 document.getElementById("message").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     document.getElementById("send").click();
   }
 });
-
