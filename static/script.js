@@ -13,8 +13,11 @@ const getMessages = async () => {
     ul.appendChild(li);
   }
 
-  // scroll automático
-  ul.scrollTop = ul.scrollHeight;
+  const isAtBottom = ul.scrollHeight - ul.scrollTop <= ul.clientHeight + 50;
+
+  if (isAtBottom) {
+    ul.scrollTop = ul.scrollHeight;
+  }
 };
 
 const postMessage = async (message) => {
